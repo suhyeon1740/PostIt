@@ -1,0 +1,14 @@
+.menu {
+    position: absolute;
+    background-color: white;
+    list-style: none;
+    width: 100px;    
+}
+.menu li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+.menu li:last-child {
+    border: none;
+}

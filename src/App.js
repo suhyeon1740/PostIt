@@ -1,10 +1,11 @@
 import PostIt from "./PostIt.js"
+// import Menu from "./Menu.js"
 
 export default class Board {
     constructor(data, $app) {
         this.$app = $app
         this.postIts = data.map(
-            ({ contents, id, x, y, color }) => new PostIt(contents, id, x, y, color)
+            (postIt) => new PostIt(postIt)
         )
         this.render()
     }
@@ -35,9 +36,11 @@ export default class Board {
         this.$selected.style.top = e.pageY - this.selectedObj.shiftY + "px"
     }
     setSelectedDom(id) {
-        this.$selected = document.querySelector(`[data-id="${id}"]`)
+        this.$selected = this.getSelectedDom(id)
         this.changeZIndex(1000)
-
+    }
+    getSelectedDom(id) {
+        return document.querySelector(`[data-id="${id}"]`)
     }
     changeZIndex(zIndex) {
         if (!this.$selected) return
@@ -47,5 +50,13 @@ export default class Board {
         this.postIts.splice(this.postIts.indexOf(this.findPostIt(id)),1)
         this.render()
     }
+    foldAndUnfold(id) {
+        const $postIt = this.getSelectedDom(id)
+        if ($postIt.querySelector("[data-target='foldAndUnfold']").classList.contains('unfold')) {
+            this.findPostIt(id).unfold($postIt)                
+        } else {
+            this.findPostIt(id).fold($postIt)
+        }        
+    }    
 }
 

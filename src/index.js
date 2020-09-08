@@ -1,4 +1,5 @@
 import App from "./App.js"
+import Menu from "./Menu.js"
 
 const data = [
     {
@@ -7,6 +8,7 @@ const data = [
         x: 10,
         y: 10,
         color: "yellow",
+        height: "200px",
     },
     {
         contents: `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequatur enim repudiandae alias, odit, sapiente est numquam iusto quaerat beatae repellat vitae dignissimos, optio laudantium quas reiciendis. Mollitia eveniet laborum accusantium.
@@ -23,9 +25,11 @@ const data = [
         x: 300,
         y: 300,
         color: "blue",
+        height: "200px",
     },
 ]
 const app = new App(data, document.querySelector("#app"))
+const menu = new Menu(document.querySelector("#app"))
 app.$app.addEventListener("dragstart", (e) => {
     // if (e.target.dataset.target != "header") return
     app.move(e)
@@ -50,6 +54,15 @@ app.$app.addEventListener("click", (e) => {
             break
         case "close":
             app.remove(e.target.parentNode.parentNode.dataset.id)
-            break        
+            break
+        case "foldAndUnfold":
+            app.foldAndUnfold(e.target.parentNode.parentNode.dataset.id)
+            break
     }
+})
+
+app.$app.addEventListener("contextmenu", (e) => {
+    e.preventDefault()
+    if (e.target.tagName != "TEXTAREA") return
+    menu.showMenu(e)
 })
