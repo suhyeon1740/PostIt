@@ -2,7 +2,8 @@
     position: absolute;
     background-color: white;
     list-style: none;
-    width: 100px;    
+    width: 100px;   
+    z-index: 9999; 
 }
 .menu li {
     padding: 10px;

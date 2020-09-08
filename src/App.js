@@ -4,9 +4,7 @@ import PostIt from "./PostIt.js"
 export default class Board {
     constructor(data, $app) {
         this.$app = $app
-        this.postIts = data.map(
-            (postIt) => new PostIt(postIt)
-        )
+        this.postIts = data.map((postIt) => new PostIt(postIt))
         this.render()
     }
     render() {
@@ -15,25 +13,16 @@ export default class Board {
     findPostIt(id) {
         return this.postIts.find((postIt) => postIt.id == id)
     }
-    move(e) {
-        const id = e.target.dataset.id
-        e.dataTransfer.setData("text", id)
-        // this.$selected = this.setSelectedDom(e)//document.querySelector(`[data-id="${id}"]`)
-        e.dataTransfer.effectAllowed = "move"
-
-        this.selectedObj = this.findPostIt(id)
-        this.selectedObj.setPosition(e)
+    move(id, clientX, clientY, target) {
+        this.findPostIt(id).setPosition(clientX, clientY, target)
     }
-    drop(e) {
-        e.preventDefault()
-        // 대상의 id를 가져와 대상 DOM에 움직인 요소를 추가합니다.
-        const id = e.dataTransfer.getData("text")
+    drop(id, pageX, pageY) {        
         // const $selected = document.querySelector(`[data-id="${id}"]`)
         this.setSelectedDom(id)
         this.$app.appendChild(this.$selected)
 
-        this.$selected.style.left = e.pageX - this.selectedObj.shiftX + "px"
-        this.$selected.style.top = e.pageY - this.selectedObj.shiftY + "px"
+        this.$selected.style.left = pageX - this.findPostIt(id).shiftX + "px"
+        this.$selected.style.top = pageY - this.findPostIt(id).shiftY + "px"
     }
     setSelectedDom(id) {
         this.$selected = this.getSelectedDom(id)
@@ -47,16 +36,16 @@ export default class Board {
         this.$selected.style.zIndex = zIndex
     }
     remove(id) {
-        this.postIts.splice(this.postIts.indexOf(this.findPostIt(id)),1)
+        this.postIts.splice(this.postIts.indexOf(this.findPostIt(id)), 1)
         this.render()
     }
     foldAndUnfold(id) {
         const $postIt = this.getSelectedDom(id)
-        if ($postIt.querySelector("[data-target='foldAndUnfold']").classList.contains('unfold')) {
-            this.findPostIt(id).unfold($postIt)                
+        if ($postIt.querySelector("[data-target='foldAndUnfold']").classList.contains("unfold")) {
+            this.findPostIt(id).unfold($postIt)
         } else {
             this.findPostIt(id).fold($postIt)
-        }        
-    }    
+        }
+    }
 }
 

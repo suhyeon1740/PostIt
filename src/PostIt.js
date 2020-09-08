@@ -8,7 +8,7 @@ class PostIt {
         this.height = height
     }
     setStyle() {
-        return `left: ${this.x}px; top: ${this.y}px`
+        return `left: ${this.x}; top: ${this.y}`
     }
     render() {
         return `<div class="postit ${this.color}" data-id="${this.id}"
@@ -20,9 +20,9 @@ class PostIt {
             <textarea data-target="postIt" >${this.contents}</textarea>
         </div>`
     }
-    setPosition(e) {
-        this.shiftX = e.clientX - e.target.getBoundingClientRect().left
-        this.shiftY = e.clientY - e.target.getBoundingClientRect().top
+    setPosition(clientX, clientY, target) {
+        this.shiftX = clientX - target.getBoundingClientRect().left
+        this.shiftY = clientY - target.getBoundingClientRect().top
     }
     fold($postIt) {
         $postIt.style.height = 0
