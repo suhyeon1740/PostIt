@@ -1,5 +1,5 @@
 class PostIt {
-    constructor({contents, id, x, y, color, height}) {
+    constructor({ contents, id, x, y, color, height }) {
         this.contents = contents
         this.id = id
         this.x = x
@@ -11,7 +11,8 @@ class PostIt {
         return `left: ${this.x}; top: ${this.y}`
     }
     render() {
-        return `<div class="postit ${this.color}" data-id="${this.id}"
+        const tempDiv = document.createElement("div")
+        tempDiv.innerHTML = `<div class="postit ${this.color}" data-id="${this.id}"
          draggable="true" style="${this.setStyle()}">
             <header class="${this.color}-header" data-target="postIt" >
                 <span data-target="foldAndUnfold" class="fold"></span>
@@ -19,14 +20,18 @@ class PostIt {
             </header>
             <textarea data-target="postIt" >${this.contents}</textarea>
         </div>`
+        this.$postIt = tempDiv.firstChild
+        return tempDiv.firstChild
     }
-    setPosition(clientX, clientY, target) {
-        this.shiftX = clientX - target.getBoundingClientRect().left
-        this.shiftY = clientY - target.getBoundingClientRect().top
+    setPosition(pageX, pageY, target) {
+        // pageX: 드래그 시작 시 커서 위치
+        // target.getBoundingClientRect().left: 요소의 현재 위치
+        this.shiftX = pageX - target.getBoundingClientRect().left
+        this.shiftY = pageY - target.getBoundingClientRect().top
     }
     fold($postIt) {
         $postIt.style.height = 0
-        $postIt.querySelector('textarea').style.display = 'none'
+        $postIt.querySelector("textarea").style.display = "none"
         $postIt.querySelector("[data-target='foldAndUnfold']").classList.add("unfold")
     }
     unfold($postIt) {

@@ -1,21 +1,24 @@
 export default class Store {
-    static getPostIt() {
-        let postIts
+    static postIts
+    static getData() {
         if (localStorage.getItem("postIts") === null) {
-            postIts = []
+            Store.postIts = []
         } else {
-            postIts = JSON.parse(localStorage.getItem("postIts"))
+            Store.postIts = JSON.parse(localStorage.getItem("postIts"))
         }
-        return postIts
+        return Store.postIts
     }
     static updatePosition(id, x, y) {
-        const postIts = Store.getPostIt()
-        const postIt = postIts.find((postIt) => postIt.id == id)
-        postIts.splice(postIts.indexOf(postIt), 1, {
-            ...postIt,
-            x: x,
-            y: y,
-        })
-        localStorage.setItem("postIts", JSON.stringify(postIts))
+        let postIt = Store.getPostIt(id)
+        postIt.x = x
+        postIt.y = y    
+        localStorage.setItem("postIts", JSON.stringify(Store.postIts))
+    }
+    static getPostIt(id) {
+        return Store.postIts.find((postIt) => postIt.id == id)
+    }
+    static updateContents(id, value) {
+        Store.getPostIt(id).contents = value
+        localStorage.setItem("postIts", JSON.stringify(Store.postIts))
     }
 }

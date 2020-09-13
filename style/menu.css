@@ -1,7 +1,9 @@
+ul {
+    list-style: none;
+}
 .menu {
     position: absolute;
     background-color: white;
-    list-style: none;
     width: 100px;   
     z-index: 9999; 
 }
@@ -12,4 +14,13 @@
 }
 .menu li:last-child {
     border: none;
+}
+.board-menu {
+    width: 150px;
+}
+.postIt-menu {
+    width: 200px;
+}
+.menu input {
+    width: 20px;
 }

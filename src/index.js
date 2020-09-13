@@ -1,50 +1,89 @@
-import App from "./App.js"
-import Menu from "./Menu.js"
+import Board from "./Board.js"
+import PostItMenu from "./PostItMenu.js"
 import Store from "./Store.js"
+import BoardMenu from "./BoardMenu.js"
 
-const app = new App(Store.getPostIt(), document.querySelector("#app"))
-const menu = new Menu(document.querySelector("#app"))
-app.$app.addEventListener("dragstart", (e) => {
+const board = new Board(Store.getData(), document.querySelector("#board"))
+const postItMenu = new PostItMenu(board.$board)
+const boardMenu  = new BoardMenu(board.$board)
+
+board.$board.addEventListener("dragstart", (e) => {
     const id = e.target.dataset.id
-    const {clientX, clientY, target} = e
+    const {pageX, pageY, target} = e
     e.dataTransfer.setData("text", id)
-    e.dataTransfer.effectAllowed = "move"
-    app.move(id, clientX, clientY, target)
+    // e.dataTransfer.effectAllowed = "move"
+    board.dragStart(id, pageX, pageY, target)
 })
 
-app.$app.addEventListener("dragover", (e) => {
-    // if (e.target.dataset.target != "header") return
+board.$board.addEventListener("dragover", (e) => {
     e.preventDefault()
     // dropEffect를 move로 설정.
     e.dataTransfer.dropEffect = "move"
 })
 
-app.$app.addEventListener("drop", (e) => {
+board.$board.addEventListener("drop", (e) => {
     e.preventDefault()
+    console.log(e.pageX, e.pageY)
     // 대상의 id를 가져와 대상 DOM에 움직인 요소를 추가합니다.
     const id = e.dataTransfer.getData("text")
+
+    
     const {pageX, pageY} = e
-    app.drop(id, pageX, pageY)
-    Store.updatePosition(id, app.$selected.style.left, app.$selected.style.top)
+    board.drop(id, pageX, pageY)
+    Store.updatePosition(id, board.$selected.style.left, board.$selected.style.top)
 })
 
-app.$app.addEventListener("click", (e) => {
+board.$board.addEventListener("click", (e) => {
     switch (e.target.dataset.target) {
         case "postIt":
-            app.changeZIndex(1)
-            app.setSelectedDom(e.target.parentNode.dataset.id)
+            board.changeZIndex(1)
+            board.setSelectedDom(e.target.parentNode.dataset.id)
             break
         case "close":
-            app.remove(e.target.parentNode.parentNode.dataset.id)
+            board.remove(e.target.parentNode.parentNode.dataset.id)
             break
         case "foldAndUnfold":
-            app.foldAndUnfold(e.target.parentNode.parentNode.dataset.id)
+            board.foldAndUnfold(e.target.parentNode.parentNode.dataset.id)
             break
     }
 })
 
-app.$app.addEventListener("contextmenu", (e) => {
-    e.preventDefault()
-    if (e.target.tagName != "TEXTAREA") return
-    menu.showMenu(e)
+board.$board.addEventListener("contextmenu", (e) => {
+    e.preventDefault()    
+    if (e.target.tagName == "TEXTAREA") {
+        postItMenu.showMenu(e)
+    } else if (e.target === e.currentTarget) {
+        boardMenu.showMenu(e)
+    }
 })
+
+board.$board.addEventListener("keyup", (e) => {
+    Store.updateContents(e.target.parentNode.dataset.id, e.target.value)
+})
+
+postItMenu.$menu.addEventListener("click", () => {
+    
+})
+
+board.$board.addEventListener("focusout", () => {
+    // alert('!÷')
+})
+
+// function addTextAreaCallback(textArea, callback, delay) {
+//     var timer = null
+//     textArea.onkeypress = function () {
+//         if (timer) {
+//             window.clearTimeout(timer)
+//         }
+//         timer = window.setTimeout(function () {
+//             timer = null
+//             callback()
+//         }, delay)
+//     }
+//     textArea = null
+// }
+
+// function doAjaxStuff() {
+//     console.log('doAjax')
+// }
+// addTextAreaCallback(document.getElementById("myTextArea"), doAjaxStuff, 1000)
