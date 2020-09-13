@@ -10,4 +10,9 @@ export default class BoardMenu extends Menu {
     setClass() {
         this.$menu.classList.add('board-menu')
     }
+    menuClick(e) {        
+        switch (e.target.dataset.menu) {
+
+        }
+    }
 }

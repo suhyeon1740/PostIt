@@ -2,6 +2,7 @@ import Board from "./Board.js"
 import PostItMenu from "./PostItMenu.js"
 import Store from "./Store.js"
 import BoardMenu from "./BoardMenu.js"
+import Menu from "./Menu.js"
 
 const board = new Board(Store.getData(), document.querySelector("#board"))
 const postItMenu = new PostItMenu(board.$board)
@@ -23,7 +24,6 @@ board.$board.addEventListener("dragover", (e) => {
 
 board.$board.addEventListener("drop", (e) => {
     e.preventDefault()
-    console.log(e.pageX, e.pageY)
     // 대상의 id를 가져와 대상 DOM에 움직인 요소를 추가합니다.
     const id = e.dataTransfer.getData("text")
 
@@ -34,6 +34,7 @@ board.$board.addEventListener("drop", (e) => {
 })
 
 board.$board.addEventListener("click", (e) => {
+    Menu.removeMenu()
     switch (e.target.dataset.target) {
         case "postIt":
             board.changeZIndex(1)
@@ -51,18 +52,14 @@ board.$board.addEventListener("click", (e) => {
 board.$board.addEventListener("contextmenu", (e) => {
     e.preventDefault()    
     if (e.target.tagName == "TEXTAREA") {
-        postItMenu.showMenu(e)
+        postItMenu.render(e)
     } else if (e.target === e.currentTarget) {
-        boardMenu.showMenu(e)
+        boardMenu.render(e)
     }
 })
 
 board.$board.addEventListener("keyup", (e) => {
     Store.updateContents(e.target.parentNode.dataset.id, e.target.value)
-})
-
-postItMenu.$menu.addEventListener("click", () => {
-    
 })
 
 board.$board.addEventListener("focusout", () => {
