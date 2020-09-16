@@ -21,4 +21,14 @@ export default class Store {
         Store.getPostIt(id).contents = value
         localStorage.setItem("postIts", JSON.stringify(Store.postIts))
     }
+    static updateBackgroundColor(id, color) {
+        let postIt = Store.getPostIt(id)
+        postIt.backgroundColor = color        
+        localStorage.setItem("postIts", JSON.stringify(Store.postIts))
+    }
+    static updateFontSize(id, size) {
+        let postIt = Store.getPostIt(id)
+        postIt.fontSize = size
+        localStorage.setItem("postIts", JSON.stringify(Store.postIts))
+    }
 }

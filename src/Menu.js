@@ -2,16 +2,19 @@ export default class Menu {
     constructor($app) {
         this.$app = $app
     }
-    render({ clientX, clientY }) {
+    showMenu({ clientX, clientY }) {
         Menu.removeMenu()
+        this.render()
+        this.setClass()
+        this.setPosition(clientX, clientY)
+        this.attachEvent()
+    }
+    render() {
         const ul = document.createElement("ul")
         ul.innerHTML = this.getTemplate()
         ul.classList.add("menu")
         this.$app.append(ul)
-        this.$menu = ul
-        this.setClass()
-        this.setPosition(clientX, clientY)
-        this.attachEvent()
+        this.$menu = ul        
     }
     static removeMenu() {
         const $menu = document.querySelector('.menu')
@@ -25,7 +28,11 @@ export default class Menu {
         this.$menu.style.display = "block"
     }
     attachEvent() {
-        this.$menu.addEventListener('click', this.menuClick)
-        this.$menu.addEventListener('contextmenu', this.menuClick)
+        this.$menu.addEventListener('click', (e) => {
+            this.menuClick(e)
+        })
+        this.$menu.addEventListener('contextmenu', (e) => {
+            this.menuClick(e)
+        })
     }
 }

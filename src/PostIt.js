@@ -1,10 +1,10 @@
 class PostIt {
-    constructor({ contents, id, x, y, color, height }) {
+    constructor({ contents, id, x, y, backgroundColor, height }) {
         this.contents = contents
         this.id = id
         this.x = x
         this.y = y
-        this.color = color
+        this.backgroundColor = backgroundColor
         this.height = height
     }
     setStyle() {
@@ -12,9 +12,9 @@ class PostIt {
     }
     render() {
         const tempDiv = document.createElement("div")
-        tempDiv.innerHTML = `<div class="postit ${this.color}" data-id="${this.id}"
+        tempDiv.innerHTML = `<div class="postit ${this.backgroundColor}" data-id="${this.id}"
          draggable="true" style="${this.setStyle()}">
-            <header class="${this.color}-header" data-target="postIt" >
+            <header class="${this.backgroundColor}-header" data-target="postIt" >
                 <span data-target="foldAndUnfold" class="fold"></span>
                 <span data-target="close">X</span>
             </header>
@@ -38,6 +38,19 @@ class PostIt {
         $postIt.style.height = this.height
         $postIt.querySelector("textarea").style.display = "block"
         $postIt.querySelector("[data-target='foldAndUnfold']").classList.remove("unfold")
+    }
+    changeBackground(color) {
+        this.$postIt.classList.remove(this.backgroundColor)
+        this.$postIt.classList.add(color)
+        this.$postIt.querySelector('header').classList.remove(`${this.backgroundColor}-header`)
+        this.$postIt.querySelector('header').classList.add(`${color}-header`)
+        this.backgroundColor = color
+    }
+    changeFontSize(size) {
+        this.$postIt.querySelector('textarea').style.fontSize = size
+    }
+    changeFontColor() {
+
     }
 }
 

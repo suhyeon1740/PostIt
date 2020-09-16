@@ -1,4 +1,5 @@
 import Menu from "./Menu.js"
+import Store from "./Store.js"
 
 export default class PostItMenu extends Menu {
     getTemplate() {
@@ -8,11 +9,11 @@ export default class PostItMenu extends Menu {
                     <li data-menu="background">
                         배경 색상 변경
                         <div class="set-background">
-                            <span class="yellow" data-color="yellow"></span>
-                            <span class="red" data-color="red"></span>
-                            <span class="blue" data-color="blue"></span>
-                            <span class="pink" data-color="pink"></span>
-                            <span class="orange" data-color="orange"></span>
+                            <span class="yellow" data-menu="background"></span>
+                            <span class="red" data-menu="background"></span>
+                            <span class="blue" data-menu="background"></span>
+                            <span class="pink" data-menu="background"></span>
+                            <span class="orange" data-menu="background"></span>
                         </div>
                     </li>
                     <li data-menu="font-size">글자 크기 선택</li>
@@ -25,12 +26,27 @@ export default class PostItMenu extends Menu {
         `
     }
     setClass() {
-        this.$menu.classList.add('postIt-menu')
+        this.$menu.classList.add("postIt-menu")
+    }
+    showMenu(e, postIt) {
+        super.showMenu(e)
+        this.selectPostIt = postIt
     }
     menuClick(e) {
-        console.log('click')
         switch (e.target.dataset.menu) {
-
+            case "background":
+                const color = e.target.className
+                this.selectPostIt.changeBackground(color)
+                Store.updateBackgroundColor(this.selectPostIt.id, color)
+                break
+            case "font-size":
+                const size = 20+'px'
+                this.selectPostIt.changeFontSize(size)
+                Store.updateFontSize(this.selectPostIt.id, size)
+                break
+            case "font-color":
+                this.selectPostIt.changeFontColor('yellow')
+                break
         }
     }
 }

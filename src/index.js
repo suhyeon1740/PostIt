@@ -52,9 +52,9 @@ board.$board.addEventListener("click", (e) => {
 board.$board.addEventListener("contextmenu", (e) => {
     e.preventDefault()    
     if (e.target.tagName == "TEXTAREA") {
-        postItMenu.render(e)
+        postItMenu.showMenu(e, board.findPostIt(e.target.parentNode.dataset.id))
     } else if (e.target === e.currentTarget) {
-        boardMenu.render(e)
+        boardMenu.showMenu(e)
     }
 })
 
